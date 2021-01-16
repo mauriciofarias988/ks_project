@@ -1,6 +1,7 @@
 ----------------------------------------------------------------------------------
 -- Company: UERGS
 -- Engineer: Joao Leonardo Fragoso
+-- Trabalho de Arthur, Gianne e Mauricio
 -- 
 -- Create Date:    19:09:17 06/26/2012 
 -- Design Name:    K and S Modeling
@@ -14,7 +15,7 @@
 -- Revision 0.01 - File Created
 --          0.02 - Moving to Vivado 2017.3
 -- Additional Comments: 
--- test
+-- 
 ----------------------------------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.all;
