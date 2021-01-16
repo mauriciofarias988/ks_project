@@ -18,6 +18,7 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.all;
 library work;
+use ieee.std_logic_unsigned.all;
 use work.k_and_s_pkg.all;
 
 entity data_path is
@@ -45,8 +46,44 @@ end data_path;
 
 architecture rtl of data_path is
 
+signal bus_a : std_logic_vector (15 downto 0);
+signal bus_b : std_logic_vector (15 downto 0);
+signal bus_c : std_logic_vector (15 downto 0);
+
+
 begin
-    ram_addr <= (others => '0'); -- just to avoid messaging from test... remove this line
+    zero_op <= '1' when bus_c = "0000000000000000" else '0';
+    
+    ula : process(bus_a, bus_b, operation)
+        begin
+        if(operation = "00") then
+            bus_c <= bus_a + bus_b;
+            if (bus_a(15) = '0' AND bus_b(15) = '0') AND bus_c(15) = '1' then
+                signed_overflow <= '1'; 
+            elsif (bus_a(15) = '1' AND bus_b(15) = '1') AND bus_c(15) = '0' then
+                signed_overflow <= '1';
+            elsif (bus_a(15) = '0' AND bus_b(15) = '1') AND (bus_a >= (NOT bus_b) - "1") then
+               unsigned_overflow <= '1';
+            elsif (bus_a(15) = '1' AND bus_b(15) = '0') AND ((NOT bus_a) - "1" <= bus_b) then
+               unsigned_overflow <= '1';
+            elsif (bus_a(15)='1' and bus_b(15)='1') then
+               unsigned_overflow <= '1'; 
+            end if;
+        elsif(operation = "01") then
+            bus_c <= bus_b - bus_a;
+        elsif(operation = "10") then    
+            bus_c <= bus_a AND bus_b;
+        else
+            bus_c <= bus_a OR bus_b;
+        end if;
+    end process ula;
+        
+    
+                          
+    
+    
+    
+    
 
 end rtl;
 
