@@ -41,7 +41,7 @@ entity data_path is
     ram_addr            : out std_logic_vector ( 4 downto 0);
     data_out            : out std_logic_vector (15 downto 0);
     data_in             : in  std_logic_vector (15 downto 0)
-  );
+  );--TESTE
 end data_path;
 
 architecture rtl of data_path is
