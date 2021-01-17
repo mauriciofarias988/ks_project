@@ -56,7 +56,7 @@ begin
     
     ula : process(bus_a, bus_b, operation)
         begin
-        if(operation = "00") then
+        if(operation = "00") then --SOMA
             bus_c <= bus_a + bus_b;
             if (bus_a(15) = '0' AND bus_b(15) = '0') AND bus_c(15) = '1' then
                 signed_overflow <= '1'; 
@@ -69,7 +69,7 @@ begin
             elsif (bus_a(15)='1' and bus_b(15)='1') then
                unsigned_overflow <= '1'; 
             end if;
-        elsif(operation = "01") then
+        elsif(operation = "01") then -- SUB
             bus_c <= bus_b - bus_a;
             if(bus_a(15) = '0' AND bus_b(15) = '1') AND bus_c(15) = '1' then 
             signed_overflow <= '1';     
@@ -82,10 +82,10 @@ begin
             elsif (bus_a(15)='1' and bus_b(15)='0') then
             unsigned_overflow <= '1'; 
             end if;
-        elsif(operation = "10") then    
+        elsif(operation = "10") then --AND    
             bus_c <= bus_a AND bus_b;
         else
-            bus_c <= bus_a OR bus_b;
+            bus_c <= bus_a OR bus_b; --OR 
         end if;
     end process ula;
         
