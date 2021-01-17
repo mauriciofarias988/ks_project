@@ -61,10 +61,32 @@ signal zero_op_flag : std_logic;
 signal neg_op_flag : std_logic;
 signal signed_overflow_flag : std_logic;
 signal unsigned_overflow_flag : std_logic;
+signal instruction : std_logic_vector (15 downto 0);
 
 begin
     zero_op_flag <= '1' when ula_out = "0000000000000000" else '0';
     neg_op_flag <= '1' when ula_out(15) = '1';
+    
+    decode_in : process (ir_enable, data_in)
+    begin
+        if (ir_enable = '1') then
+        instruction <= data_in;
+        end if;
+    end process decode_in;
+    
+    
+    
+    decode : process (instruction)
+    begin
+       ram_addr(0) <= instruction(0);
+       ram_addr(1) <= instruction(1);
+       ram_addr(2) <= instruction(2);
+       ram_addr(3) <= instruction(3);
+       ram_addr(4) <= instruction(4);
+       
+    end process decode;
+    
+    
     flags :    process (flags_reg_enable,zero_op_flag,neg_op_flag,signed_overflow_flag,unsigned_overflow_flag)
     begin
         if (flags_reg_enable = '1') then
