@@ -46,7 +46,7 @@ end data_path;
 
 architecture rtl of data_path is
 
-signal bus_a : std_logic_vector (15 downto 0);
+signal bus_a : std_logic_vector (15 downto 0); 
 signal bus_b : std_logic_vector (15 downto 0);
 signal bus_c : std_logic_vector (15 downto 0);
 
@@ -54,7 +54,7 @@ signal bus_c : std_logic_vector (15 downto 0);
 begin
     zero_op <= '1' when bus_c = "0000000000000000" else '0';
     
-    ula : process(bus_a, bus_b, operation)
+    ula : process(bus_a, bus_b, operation) -- ULA 
         begin
         if(operation = "00") then --SOMA
             bus_c <= bus_a + bus_b;
@@ -88,9 +88,7 @@ begin
             bus_c <= bus_a OR bus_b; --OR 
         end if;
     end process ula;
-        
-    
-                          
+         
     
     
     
