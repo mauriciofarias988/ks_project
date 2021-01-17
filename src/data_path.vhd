@@ -71,6 +71,17 @@ begin
             end if;
         elsif(operation = "01") then
             bus_c <= bus_b - bus_a;
+            if(bus_a(15) = '0' AND bus_b(15) = '1') AND bus_c(15) = '1' then 
+            signed_overflow <= '1';     
+            elsif (bus_a(15) = '1' AND bus_b(15) = '0') AND bus_c(15) = '0' then
+            signed_overflow <= '1';    
+            elsif (bus_a(15) = '0' and bus_b(15) = '0') and (bus_a >= bus_b) then
+            unsigned_overflow <= '1';
+            elsif (bus_a(15) = '1' and bus_b(15) = '1') and ((not bus_a) - "1" <= (not bus_b)-1) then
+            unsigned_overflow <= '1';
+            elsif (bus_a(15)='1' and bus_b(15)='0') then
+            unsigned_overflow <= '1'; 
+            end if;
         elsif(operation = "10") then    
             bus_c <= bus_a AND bus_b;
         else
