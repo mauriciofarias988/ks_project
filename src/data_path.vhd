@@ -67,7 +67,7 @@ begin
     neg_op_flag <= '1' when ula_out(15) = '1';
     flags :    process (flags_reg_enable,zero_op_flag,neg_op_flag,signed_overflow_flag,unsigned_overflow_flag)
     begin
-        if (flags_reg_enable = 1) then
+        if (flags_reg_enable = '1') then
             zero_op <= zero_op_flag;
             neg_op <= neg_op_flag;
             signed_overflow <= signed_overflow_flag;
