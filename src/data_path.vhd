@@ -62,6 +62,9 @@ signal neg_op_flag : std_logic;
 signal signed_overflow_flag : std_logic;
 signal unsigned_overflow_flag : std_logic;
 signal instruction : std_logic_vector (15 downto 0);
+signal in_pc : std_logic_vector (4 downto 0);
+signal mem_addr : std_logic_vector (4 downto 0);
+signal program_counter : std_logic_vector (4 downto 0);
 
 begin
     zero_op_flag <= '1' when ula_out = "0000000000000000" else '0';
@@ -155,7 +158,7 @@ begin
             when "10" => bus_b <= register_2;
             when "11" => bus_b <= register_3;
        end case;
-    if (write_reg_enable='1') then
+    if (write_reg_enable = '1') then
        case  c_addr is  --
             when "00" => register_0 <= bus_c;
             when "01" => register_1 <= bus_c;
@@ -164,6 +167,31 @@ begin
        end case;   
     end if;
     end process Register_Bank;
+    
+    Addr_mux : process (addr_sel,program_counter,mem_addr) --Multiplexador do endereço de memoria
+    begin
+    if (addr_sel = '0') then
+        ram_addr <= mem_addr; 
+    else
+        ram_addr <= program_counter;
+    end if;
+    end process Addr_mux;
+    
+    Branch_mux : process (branch,program_counter,mem_addr) --Multiplexador do endereço de memoria
+    begin
+    if (branch = '0') then
+        in_pc <= program_counter+1; 
+    else
+        in_pc <= mem_addr;
+    end if;
+    end process Branch_mux;
+    
+    Pc : process (in_pc,pc_enable)
+    begin
+    if (pc_enable = '1') then
+    program_counter <= in_pc;
+    end if;
+    end process Pc;
     
 
 end rtl;
