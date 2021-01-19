@@ -67,33 +67,26 @@ signal mem_addr : std_logic_vector (4 downto 0);
 signal program_counter : std_logic_vector (4 downto 0);
 
 begin
-    zero_op_flag <= '1' when ula_out = "0000000000000000" else '0';
-    neg_op_flag <= '1' when ula_out(15) = '1';
-    
-    decode_in : process (ir_enable, data_in)
+    decode_in : process (clk)
     begin
         if (ir_enable = '1') then
         instruction <= data_in;
         end if;
     end process decode_in;
     
-    
-    
     decode : process (instruction)
     begin
-       ram_addr(0) <= instruction(0);
-       ram_addr(1) <= instruction(1);
-       ram_addr(2) <= instruction(2);
-       ram_addr(3) <= instruction(3);
-       ram_addr(4) <= instruction(4);
-       
+       ram_addr <= instruction (4 downto 0);
     end process decode;
     
-    
-    flags :    process (flags_reg_enable,zero_op_flag,neg_op_flag,signed_overflow_flag,unsigned_overflow_flag)
+    flags :    process (clk)
     begin
+        zero_op <= '0';
+        neg_op <= '0';
+        signed_overflow <= '0';
+        unsigned_overflow <= '0';
         if (flags_reg_enable = '1') then
-            zero_op <= zero_op_flag;
+            zero_op <= zero_op_flag; 
             neg_op <= neg_op_flag;
             signed_overflow <= signed_overflow_flag;
             unsigned_overflow <= unsigned_overflow_flag;
@@ -144,7 +137,7 @@ begin
         end if;
         end process Seletor_Register_Bank;
     
-    Register_Bank : process (bus_c,write_reg_enable,c_addr) --Banco de registradores
+    Register_Bank : process (clk) --Banco de registradores
     begin
        case  a_addr is  --
             when "00" => bus_a <= register_0;
@@ -186,10 +179,12 @@ begin
     end if;
     end process Branch_mux;
     
-    Pc : process (in_pc,pc_enable)
+    Pc : process (clk)
     begin
-    if (pc_enable = '1') then
-    program_counter <= in_pc;
+    if (rst_n = '0') then
+        program_counter <= "00000";
+    elsif (pc_enable = '1') then
+        program_counter <= in_pc;
     end if;
     end process Pc;
     
