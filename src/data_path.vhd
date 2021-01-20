@@ -198,20 +198,20 @@ begin
             when "00" => bus_a <= register_0;
             when "01" => bus_a <= register_1;
             when "10" => bus_a <= register_2;
-            when "11" => bus_a <= register_3;
+            when others => bus_a <= register_3;
        end case;
        case  b_addr is 
             when "00" => bus_b <= register_0;
             when "01" => bus_b <= register_1;
             when "10" => bus_b <= register_2;
-            when "11" => bus_b <= register_3;
+            when others => bus_b <= register_3;
        end case;
     if (write_reg_enable = '1') then
        case  c_addr is 
             when "00" => register_0 <= bus_c;
             when "01" => register_1 <= bus_c;
             when "10" => register_2 <= bus_c;
-            when "11" => register_3 <= bus_c;
+            when others => register_3 <= bus_c;
        end case;   
     end if;
     data_out <= bus_a;
