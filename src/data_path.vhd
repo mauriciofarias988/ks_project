@@ -67,16 +67,71 @@ signal mem_addr : std_logic_vector (4 downto 0);
 signal program_counter : std_logic_vector (4 downto 0);
 
 begin
-    decode_in : process (clk)
+
+    zero_op_flag <= '1' when ula_out = "0000000000000000" else '0';
+    neg_op_flag <= '1' when ula_out(15) = '1';
+    
+    IR : process (clk)
     begin
         if (ir_enable = '1') then
         instruction <= data_in;
         end if;
-    end process decode_in;
+    end process IR;
     
     decode : process (instruction)
     begin
-       ram_addr <= instruction (4 downto 0);
+        a_addr <= "00";
+        b_addr <= "00";
+        c_addr <= "00";
+        mem_addr <= "00000";
+        decoded_instruction <= I_NOP;
+        if(instruction(15 downto 8) = "10000001") then -- LOAD
+            decoded_instruction <= I_LOAD;
+            c_addr <= instruction(6 downto 5);
+            mem_addr <= instruction(4 downto 0);
+        elsif(instruction(15 downto 8) = "10000010") then
+            decoded_instruction <= I_STORE;
+            c_addr <= instruction(6 downto 5);
+            mem_addr <= instruction(4 downto 0);
+         elsif(instruction(15 downto 8) = "10010001") then
+            decoded_instruction <= I_MOVE;
+            a_addr <= instruction(1 downto 0);
+            b_addr <= instruction(1 downto 0);
+            c_addr <= instruction(3 downto 2);
+         elsif(instruction(15 downto 8) = "10100001") then
+            decoded_instruction <= I_ADD;
+            a_addr <= instruction(1 downto 0);
+            b_addr <= instruction(3 downto 2);
+            c_addr <= instruction(5 downto 4);
+         elsif(instruction(15 downto 8) = "10100010") then
+            decoded_instruction <= I_SUB;
+            a_addr <= instruction(1 downto 0);
+            b_addr <= instruction(3 downto 2);
+            c_addr <= instruction(5 downto 4);
+         elsif(instruction(15 downto 8) = "10100011") then
+            decoded_instruction <= I_AND;
+            a_addr <= instruction(1 downto 0);
+            b_addr <= instruction(3 downto 2);
+            c_addr <= instruction(5 downto 4);
+         elsif(instruction(15 downto 8) = "10100100") then
+            decoded_instruction <= I_OR;
+            a_addr <= instruction(1 downto 0);
+            b_addr <= instruction(3 downto 2);
+            c_addr <= instruction(5 downto 4);
+         elsif(instruction(15 downto 8) = "00000001") then
+            decoded_instruction <= I_BRANCH;
+            mem_addr <= instruction(4 downto 0);
+         elsif(instruction(15 downto 8) = "00000010") then
+            decoded_instruction <= I_BZERO;
+            mem_addr <= instruction(4 downto 0);
+         elsif(instruction(15 downto 8) = "00000011") then
+            decoded_instruction <= I_BNEG;
+            mem_addr <= instruction(4 downto 0);                
+         elsif(instruction(15 downto 8) = "11111111") then
+            decoded_instruction <= I_HALT; 
+         else 
+            decoded_instruction <= I_NOP;        
+         end if;
     end process decode;
     
     flags :    process (clk)
@@ -139,26 +194,27 @@ begin
     
     Register_Bank : process (clk) --Banco de registradores
     begin
-       case  a_addr is  --
+       case  a_addr is 
             when "00" => bus_a <= register_0;
             when "01" => bus_a <= register_1;
             when "10" => bus_a <= register_2;
             when "11" => bus_a <= register_3;
        end case;
-       case  b_addr is  --
+       case  b_addr is 
             when "00" => bus_b <= register_0;
             when "01" => bus_b <= register_1;
             when "10" => bus_b <= register_2;
             when "11" => bus_b <= register_3;
        end case;
     if (write_reg_enable = '1') then
-       case  c_addr is  --
+       case  c_addr is 
             when "00" => register_0 <= bus_c;
             when "01" => register_1 <= bus_c;
             when "10" => register_2 <= bus_c;
             when "11" => register_3 <= bus_c;
        end case;   
     end if;
+    data_out <= bus_a;
     end process Register_Bank;
     
     Addr_mux : process (addr_sel,program_counter,mem_addr) --Multiplexador do endereço de memoria
