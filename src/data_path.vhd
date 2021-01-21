@@ -91,7 +91,7 @@ begin
             mem_addr <= instruction(4 downto 0);
         elsif(instruction(15 downto 8) = "10000010") then
             decoded_instruction <= I_STORE;
-            c_addr <= instruction(6 downto 5);
+            a_addr <= instruction(6 downto 5);
             mem_addr <= instruction(4 downto 0);
          elsif(instruction(15 downto 8) = "10010001") then
             decoded_instruction <= I_MOVE;
