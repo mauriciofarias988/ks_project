@@ -47,7 +47,7 @@ end control_unit;
 --gigi
 architecture rtl of control_unit is
 
-    type state_type is (FETCH, DECODE, NEXT1, NEXT2, ULA1, ULA2, LOAD1, LOAD2);
+    type state_type is (FETCH, DECODE, NEXT1, NEXT2, ADD1, ADD2, SUB1, SUB2, AND1, AND2, OR1, OR2, LOAD1, LOAD2, STORE1, STORE2, MOVE1, MOVE2, BRANCH1, BZERO, BNEG, NOP);
     signal state : state_type;
     
 begin
@@ -56,8 +56,17 @@ process(clk, rst_n)
     begin
     if rst_n = '1' then
         state <= FETCH;
-        
     elsif(rising_edge(clk)) then
+        branch <= '0';
+        pc_enable <= '0';
+        ir_enable <= '0';
+        write_reg_enable <= '0';
+        addr_sel <= '0';
+        c_sel <= '0';
+        operation <= "00";
+        flags_reg_enable <= '0';
+        ram_write_enable <= '0';
+        halt <= '0';   
         case state is
             when FETCH=>
             ir_enable <= '1';
@@ -66,10 +75,29 @@ process(clk, rst_n)
             when DECODE=>
                 if decoded_instruction = I_LOAD then
                     state <= LOAD1;
-                 elsif decoded_instruction = I_STORE then
-                 
-                 else
+                elsif decoded_instruction = I_STORE then
+                    state <= STORE1;
+                elsif decoded_instruction = I_MOVE then
+                    state <= MOVE1;
+                elsif decoded_instruction = I_ADD then
+                    state <= ADD1;
+                elsif decoded_instruction = I_SUB then
+                    state <= SUB1;
+                elsif decoded_instruction = I_AND then
+                    state <= ADD1;
+                elsif decoded_instruction = I_OR then
+                    state <= SUB1;
+                elsif decoded_instruction = I_BRANCH then
+                    state <= BRANCH1;
+                elsif decoded_instruction = I_BZERO then
+                    state <= BZERO;
+                elsif decoded_instruction = I_BNEG then
+                    state <= BNEG;    
+                else
+                    state <= NEXT1;
             end if;
+            
+            --OPERAÇÕES DE MOVIMENTAÇÃO
             when LOAD1=>
                 addr_sel <= '0';
                 state <= LOAD2;
@@ -77,13 +105,64 @@ process(clk, rst_n)
             c_sel <= '1'; 
             write_reg_enable <= '1';
             state <= NEXT1;
-            when ULA1 =>
-            if decoded_instruction = I_ADD then
-                    operation <= "00";
-                    state <= LOAD1;
-            elsif decoded_instruction = I_SUB then
-                    operation <= "01";
-            end if;
+            when STORE1=>
+                addr_sel <= '0';
+                state <= STORE2;
+            when STORE2=>
+                write_reg_enable <= '1';
+                state <= NEXT1;
+            when MOVE1=>
+                operation <= "10";
+                c_sel <= '0';
+                state <= MOVE2;
+            when MOVE2=>
+                write_reg_enable <= '1';
+                state <= NEXT1;
+                
+            --OPERAÇÕES ARITMÉTICAS
+            when ADD1=>
+                operation <= "00";
+                c_sel <= '0';
+                state <= ADD2;
+            when ADD2=>
+                write_reg_enable <= '1';
+                state <= NEXT1;
+             when SUB1=>
+                operation <= "01";
+                c_sel <= '0';
+                state <= SUB2;
+            when SUB2=>
+                write_reg_enable <= '1';
+                state <= NEXT1;
+             when AND1=>
+                operation <= "10";
+                c_sel <= '0';
+                state <= AND2;
+            when AND2=>
+                write_reg_enable <= '1';
+                state <= NEXT1;
+            when OR1=>
+                operation <= "11";
+                c_sel <= '0';
+                state <= OR2;
+            when OR2=>
+                write_reg_enable <= '1';
+                state <= NEXT1;
+                
+            --OPERAÇÕES BRANCH
+            when BRANCH1=>
+                branch <= '1';
+                addr_sel <= '1';
+                pc_enable <= '1';
+                state <= NEXT2;
+            when BZERO=>
+                if() then 
+                else
+                end if;
+             when BNEG=>
+                if() then 
+                else
+                end if;                         
            end case;
             
      end if;
