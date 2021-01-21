@@ -51,7 +51,7 @@ architecture rtl of control_unit is
     signal state : state_type;
     
 begin
-
+--gigi
 process(clk, rst_n)
     begin
     if rst_n = '1' then
