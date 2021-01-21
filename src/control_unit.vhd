@@ -44,7 +44,7 @@ entity control_unit is
     );
 end control_unit;
 
---gigi
+--22
 architecture rtl of control_unit is
 
     type state_type is (FETCH, DECODE, NEXT1, NEXT2, ULA1, ULA2, LOAD1, LOAD2);
