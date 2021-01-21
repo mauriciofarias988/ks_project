@@ -44,14 +44,14 @@ entity control_unit is
     );
 end control_unit;
 
-
+--gigi
 architecture rtl of control_unit is
 
     type state_type is (FETCH, DECODE, NEXT1, NEXT2, ULA1, ULA2, LOAD1, LOAD2);
     signal state : state_type;
     
 begin
---GIGI
+
 process(clk, rst_n)
     begin
     if rst_n = '1' then
