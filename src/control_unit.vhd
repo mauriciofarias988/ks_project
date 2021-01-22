@@ -72,7 +72,7 @@ process(clk, rst_n)
                 state <= DECODE;
             when NEXT1=>
                     pc_enable <= '1';
-                    state <= NEXT2;S
+                    state <= NEXT2;
             when NEXT2=>
                     state <= FETCH;
             when DECODE=>
