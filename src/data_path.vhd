@@ -195,8 +195,21 @@ begin
     Register_Bank : process (clk) --Banco de registradores
     begin    
        data_out <= bus_a;
+       
      if (rising_edge(clk)) then
-            if (write_reg_enable = '1') then
+            if (write_reg_enable = '0') then
+                case a_addr is 
+                    when "00" => bus_a <= register_0;
+                    when "01" => bus_a <= register_1;
+            when "10" => bus_a <= register_2;
+            when others => bus_a <= register_3;
+       end case;
+       case  b_addr is 
+            when "00" => bus_b <= register_0;
+            when "01" => bus_b <= register_1;
+            when "10" => bus_b <= register_2;
+            when others => bus_b <= register_3;
+       end case;
                 case  c_addr is 
                 when "00" => register_0 <= bus_c;
                 when "01" => register_1 <= bus_c;
@@ -214,15 +227,7 @@ begin
     end if;
     end process Register_Bank;
     
-    bus_awire : bus_a <= register_3 when a_addr = "11" else
-    register_2 when a_addr = "10" else
-    register_1 when a_addr = "01" else
-    register_0;
-    
-    bus_bwire : bus_b <= register_3 when b_addr = "11" else
-    register_2 when b_addr = "10" else
-    register_1 when b_addr = "01" else
-    register_0;
+
     
     
     Addr_mux : process (addr_sel,program_counter,mem_addr) --Multiplexador do endereço de memoria
