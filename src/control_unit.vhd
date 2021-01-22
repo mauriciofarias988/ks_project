@@ -44,7 +44,6 @@ entity control_unit is
     );
 end control_unit;
 
---gigi
 architecture rtl of control_unit is
 
     type state_type is (FETCH, DECODE, NEXT1, NEXT2, ADD1, ADD2, SUB1, SUB2, AND1, AND2, OR1, OR2, LOAD1, LOAD2, STORE1, STORE2, MOVE1, MOVE2, BRANCH1, BZERO, BNEG, NOP);
@@ -65,8 +64,6 @@ process(clk, rst_n)
         c_sel <= '0';
         operation <= "00";
         flags_reg_enable <= '0';
-        ram_write_enable <= '0';
-        halt <= '0';   
         case state is
             when FETCH=>
             ir_enable <= '1';
@@ -93,10 +90,12 @@ process(clk, rst_n)
                     state <= BZERO;
                 elsif decoded_instruction = I_BNEG then
                     state <= BNEG;    
-                else
+                elsif decoded_instruction = I_NOP then
                     state <= NEXT1;
-            end if;
-            
+                else
+                
+                end if;
+                
             --OPERAÇÕES DE MOVIMENTAÇÃO
             when LOAD1=>
                 addr_sel <= '0';
@@ -156,12 +155,22 @@ process(clk, rst_n)
                 pc_enable <= '1';
                 state <= NEXT2;
             when BZERO=>
-                if() then 
+                if zero_op<='1' then
+                    branch <= '1';
+                    addr_sel <= '1';
+                    pc_enable <= '1';
+                    state <= NEXT2;  
                 else
+                    state <= NEXT1; 
                 end if;
              when BNEG=>
-                if() then 
+                if neg_op<='1' then
+                    branch <= '1';
+                    addr_sel <= '1';
+                    pc_enable <= '1';
+                    state <= NEXT2;  
                 else
+                    state <= NEXT1;
                 end if;                         
            end case;
             
