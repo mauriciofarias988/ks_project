@@ -73,8 +73,8 @@ begin
     
     IR : process (clk)
     begin
-        if (ir_enable = '1') then
-        instruction <= data_in;
+        if (ir_enable = '1' AND rising_edge(clk)) then
+            instruction <= data_in;
         end if;
     end process IR;
     
@@ -84,54 +84,54 @@ begin
         b_addr <= "00";
         c_addr <= "00";
         mem_addr <= "00000";
-        decoded_instruction <= I_NOP;
-        if(instruction(15 downto 8) = "10000001") then -- LOAD
+        case instruction(15 downto 8) is
+        when "10000001"=> -- LOAD
             decoded_instruction <= I_LOAD;
             c_addr <= instruction(6 downto 5);
             mem_addr <= instruction(4 downto 0);
-        elsif(instruction(15 downto 8) = "10000010") then
+        when "10000010"=>
             decoded_instruction <= I_STORE;
             a_addr <= instruction(6 downto 5);
             mem_addr <= instruction(4 downto 0);
-         elsif(instruction(15 downto 8) = "10010001") then
+         when  "10010001"=>
             decoded_instruction <= I_MOVE;
             a_addr <= instruction(1 downto 0);
             b_addr <= instruction(1 downto 0);
             c_addr <= instruction(3 downto 2);
-         elsif(instruction(15 downto 8) = "10100001") then
+         when  "10100001"=>
             decoded_instruction <= I_ADD;
             a_addr <= instruction(1 downto 0);
             b_addr <= instruction(3 downto 2);
             c_addr <= instruction(5 downto 4);
-         elsif(instruction(15 downto 8) = "10100010") then
+         when "10100010"=>
             decoded_instruction <= I_SUB;
             a_addr <= instruction(1 downto 0);
             b_addr <= instruction(3 downto 2);
             c_addr <= instruction(5 downto 4);
-         elsif(instruction(15 downto 8) = "10100011") then
+         when  "10100011"=>
             decoded_instruction <= I_AND;
             a_addr <= instruction(1 downto 0);
             b_addr <= instruction(3 downto 2);
             c_addr <= instruction(5 downto 4);
-         elsif(instruction(15 downto 8) = "10100100") then
+         when "10100100"=>
             decoded_instruction <= I_OR;
             a_addr <= instruction(1 downto 0);
             b_addr <= instruction(3 downto 2);
             c_addr <= instruction(5 downto 4);
-         elsif(instruction(15 downto 8) = "00000001") then
+         when "00000001"=>
             decoded_instruction <= I_BRANCH;
             mem_addr <= instruction(4 downto 0);
-         elsif(instruction(15 downto 8) = "00000010") then
+         when "00000010" =>
             decoded_instruction <= I_BZERO;
             mem_addr <= instruction(4 downto 0);
-         elsif(instruction(15 downto 8) = "00000011") then
+         when  "00000011" =>
             decoded_instruction <= I_BNEG;
             mem_addr <= instruction(4 downto 0);                
-         elsif(instruction(15 downto 8) = "11111111") then
+         when "11111111"=>
             decoded_instruction <= I_HALT; 
-         else 
+         when  others=> 
             decoded_instruction <= I_NOP;        
-         end if;
+         end case;
     end process decode;
     
     flags :    process (clk)
@@ -140,7 +140,7 @@ begin
         neg_op <= '0';
         signed_overflow <= '0';
         unsigned_overflow <= '0';
-        if (flags_reg_enable = '1') then
+        if (flags_reg_enable = '1' AND rising_edge(clk)) then
             zero_op <= zero_op_flag; 
             neg_op <= neg_op_flag;
             signed_overflow <= signed_overflow_flag;
@@ -193,29 +193,37 @@ begin
         end process Seletor_Register_Bank;
     
     Register_Bank : process (clk) --Banco de registradores
-    begin
-       case  a_addr is 
-            when "00" => bus_a <= register_0;
-            when "01" => bus_a <= register_1;
-            when "10" => bus_a <= register_2;
-            when others => bus_a <= register_3;
-       end case;
-       case  b_addr is 
-            when "00" => bus_b <= register_0;
-            when "01" => bus_b <= register_1;
-            when "10" => bus_b <= register_2;
-            when others => bus_b <= register_3;
-       end case;
-    if (write_reg_enable = '1') then
-       case  c_addr is 
-            when "00" => register_0 <= bus_c;
-            when "01" => register_1 <= bus_c;
-            when "10" => register_2 <= bus_c;
-            when others => register_3 <= bus_c;
-       end case;   
+    begin    
+       data_out <= bus_a;
+     if (rising_edge(clk)) then
+            if (write_reg_enable = '1') then
+                case  c_addr is 
+                when "00" => register_0 <= bus_c;
+                when "01" => register_1 <= bus_c;
+                when "10" => register_2 <= bus_c;
+                when others => register_3 <= bus_c;
+                 end case;   
+            else
+                if (rst_n = '0') then
+                    register_0 <= "0000000000000000";
+                    register_1 <= "0000000000000000";
+                    register_2 <= "0000000000000000";
+                    register_3 <= "0000000000000000";
+                 end if;
+             end if;
     end if;
-    data_out <= bus_a;
     end process Register_Bank;
+    
+    bus_awire : bus_a <= register_3 when a_addr = "11" else
+    register_2 when a_addr = "10" else
+    register_1 when a_addr = "01" else
+    register_0;
+    
+    bus_bwire : bus_b <= register_3 when b_addr = "11" else
+    register_2 when b_addr = "10" else
+    register_1 when b_addr = "01" else
+    register_0;
+    
     
     Addr_mux : process (addr_sel,program_counter,mem_addr) --Multiplexador do endereço de memoria
     begin
@@ -237,9 +245,9 @@ begin
     
     Pc : process (clk)
     begin
-    if (rst_n = '0') then
+    if (rst_n = '0' AND rising_edge(clk)) then
         program_counter <= "00000";
-    elsif (pc_enable = '1') then
+    elsif (pc_enable = '1' AND rising_edge(clk)) then
         program_counter <= in_pc;
     end if;
     end process Pc;

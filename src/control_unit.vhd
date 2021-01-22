@@ -53,7 +53,7 @@ begin
 
 process(clk, rst_n)
     begin
-    if rst_n = '1' then
+    if rst_n = '0' and rising_edge(clk) then
         state <= FETCH;
     elsif(rising_edge(clk)) then
         branch <= '0';
@@ -63,12 +63,18 @@ process(clk, rst_n)
         addr_sel <= '0';
         c_sel <= '0';
         operation <= "00";
+        ram_write_enable <= '0';
         flags_reg_enable <= '0';
+        halt <= '0';
         case state is
             when FETCH=>
-            ir_enable <= '1';
-            state <= DECODE;
-            
+                ir_enable <= '1';
+                state <= DECODE;
+            when NEXT1=>
+                    pc_enable <= '1';
+                    state <= NEXT2;S
+            when NEXT2=>
+                    state <= FETCH;
             when DECODE=>
                 if decoded_instruction = I_LOAD then
                     state <= LOAD1;
@@ -93,17 +99,17 @@ process(clk, rst_n)
                 elsif decoded_instruction = I_NOP then
                     state <= NEXT1;
                 else
-                
+                    state <= NOP;
                 end if;
                 
             --OPERAÇÕES DE MOVIMENTAÇÃO
             when LOAD1=>
                 addr_sel <= '0';
                 state <= LOAD2;
-            when LOAD2=>
-            c_sel <= '1'; 
-            write_reg_enable <= '1';
-            state <= NEXT1;
+            when LOAD2=> 
+                c_sel <= '1'; 
+                write_reg_enable <= '1';
+                state <= NEXT1;
             when STORE1=>
                 addr_sel <= '0';
                 state <= STORE2;
@@ -169,9 +175,12 @@ process(clk, rst_n)
                     addr_sel <= '1';
                     pc_enable <= '1';
                     state <= NEXT2;  
+
                 else
                     state <= NEXT1;
-                end if;                         
+                end if;
+              when others=>
+                                     
            end case;
             
      end if;

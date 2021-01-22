@@ -1,0 +1,7 @@
+
+Assemblying K and S assembly program
+
+  Analysing file prog.asm
+Warning: Invalid command at line 6 "10"
+         Memory will set to zero at address 2
+Filling up memory with zeros...
