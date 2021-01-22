@@ -41,7 +41,7 @@ entity control_unit is
     signed_overflow     : in  std_logic;
     ram_write_enable    : out std_logic;
     halt                : out std_logic
-    );
+    ); --NOVA VERSAO
 end control_unit;
 
 architecture rtl of control_unit is
