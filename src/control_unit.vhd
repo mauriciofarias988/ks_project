@@ -75,6 +75,7 @@ process(clk, rst_n)
                 ir_enable <= '1';
                 state <= FETCHX;
             when NEXT1=>
+                    branch <= '1';
                     pc_enable <= '1';
                     state <= NEXT2;
             when NEXT2=>
