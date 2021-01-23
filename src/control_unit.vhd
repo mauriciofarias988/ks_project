@@ -46,7 +46,7 @@ end control_unit;
 
 architecture rtl of control_unit is
 
-    type state_type is (START1, FETCHX, FETCH, DECODE, NEXT1, NEXT2, ADD1, ADD2, SUB1, SUB2, AND1, AND2, OR1, OR2, LOAD1, LOAD2, STORE1, STORE2, MOVE1, MOVE2, BRANCH1, BZERO, BNEG, NOP);
+    type state_type is (START1, FETCH, DECODE, NEXT1, NEXT2, ADD1, ADD2, SUB1, SUB2, AND1, AND2, OR1, OR2, LOAD1, LOAD2, STORE1, STORE2, MOVE1, MOVE2, BRANCH1, BZERO, BNEG, NOP);
     signal state : state_type;
     
 begin
@@ -69,11 +69,9 @@ process(clk, rst_n)
         case state is
             when START1=>
                 state <= FETCH;
-            when FETCHX=>
-                state <= DECODE;
             when FETCH=>
                 ir_enable <= '1';
-                state <= FETCHX;
+                state <= DECODE;
             when NEXT1=>
                     branch <= '1';
                     pc_enable <= '1';

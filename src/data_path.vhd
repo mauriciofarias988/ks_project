@@ -185,7 +185,7 @@ begin
     
     Seletor_Register_Bank : process (c_sel,ula_out,data_in)
         begin
-        if (c_sel='0') then
+        if (c_sel='1') then
             bus_c <= data_in;
         else
             bus_c <= ula_out;
@@ -195,26 +195,13 @@ begin
     Register_Bank : process (clk) --Banco de registradores
     begin    
        data_out <= bus_a;
-       
      if (rising_edge(clk)) then
-            if (write_reg_enable = '0') then
-                case a_addr is 
-                    when "00" => bus_a <= register_0;
-                    when "01" => bus_a <= register_1;
-            when "10" => bus_a <= register_2;
-            when others => bus_a <= register_3;
-       end case;
-       case  b_addr is 
-            when "00" => bus_b <= register_0;
-            when "01" => bus_b <= register_1;
-            when "10" => bus_b <= register_2;
-            when others => bus_b <= register_3;
-       end case;
-                case  c_addr is 
-                when "00" => register_0 <= bus_c;
-                when "01" => register_1 <= bus_c;
-                when "10" => register_2 <= bus_c;
-                when others => register_3 <= bus_c;
+            if (write_reg_enable = '1') then
+                case c_addr is 
+                     when "00" => register_0 <= bus_c;
+                     when "01" => register_1 <= bus_c;
+                     when "10" => register_2 <= bus_c;
+                     when others => register_3 <= bus_c;
                  end case;   
             else
                 if (rst_n = '0') then
@@ -224,15 +211,26 @@ begin
                     register_3 <= "0000000000000000";
                  end if;
              end if;
+              case a_addr is 
+                    when "00" => bus_a <= register_0;
+                    when "01" => bus_a <= register_1;
+                    when "10" => bus_a <= register_2;
+                    when others => bus_a <= register_3;
+                      end case;
+                case  b_addr is 
+                     when "00" => bus_b <= register_0;
+                     when "01" => bus_b <= register_1;
+                     when "10" => bus_b <= register_2;
+                     when others => bus_b <= register_3;
+                end case;
     end if;
     end process Register_Bank;
     
-
     
     
     Addr_mux : process (addr_sel,program_counter,mem_addr) --Multiplexador do endereço de memoria
     begin
-    if (addr_sel = '0') then
+    if (addr_sel = '1') then
         ram_addr <= mem_addr; 
     else
         ram_addr <= program_counter;
@@ -241,7 +239,7 @@ begin
     
     Branch_mux : process (branch,program_counter,mem_addr) --Multiplexador do endereço de memoria
     begin
-    if (branch = '0') then
+    if (branch = '1') then
         in_pc <= program_counter+1; 
     else
         in_pc <= mem_addr;
