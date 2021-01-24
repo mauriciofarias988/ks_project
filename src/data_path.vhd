@@ -87,7 +87,7 @@ begin
         case instruction(15 downto 8) is
         when "10000001"=> -- LOAD
             decoded_instruction <= I_LOAD;
-            c_addr <= instruction(6 downto 5);
+            c_addr <= instruction(7 downto 6);
             mem_addr <= instruction(4 downto 0);
         when "10000010"=>
             decoded_instruction <= I_STORE;
