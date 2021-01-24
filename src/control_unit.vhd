@@ -54,6 +54,7 @@ begin
 process(clk, rst_n)
     begin
     if rst_n = '0' and rising_edge(clk) then
+        ir_enable <= '1';
         state <= START1;
     elsif(rising_edge(clk)) then
         branch <= '0';
@@ -101,13 +102,11 @@ process(clk, rst_n)
                     state <= BNEG;    
                 elsif decoded_instruction = I_NOP then
                     state <= NEXT1;
-                else
-                    state <= NOP;
                 end if;
                 
             --OPERAÇÕES DE MOVIMENTAÇÃO
             when LOAD1=>
-                addr_sel <= '0';
+                addr_sel <= '1';
                 state <= LOAD2;
             when LOAD2=> 
                 c_sel <= '1'; 
@@ -180,7 +179,7 @@ process(clk, rst_n)
                     state <= NEXT2;  
 
                 else
-                    state <= NEXT1;
+                    state <= NEXT2;
                 end if;
               when others=>
                                      
