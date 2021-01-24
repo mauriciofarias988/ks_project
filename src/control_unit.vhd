@@ -74,6 +74,7 @@ process(clk, rst_n)
                 ir_enable <= '1';
                 state <= DECODE;
             when NEXT1=>
+                    addr_sel <= '0';
                     branch <= '1';
                     pc_enable <= '1';
                     state <= NEXT2;
