@@ -93,7 +93,7 @@ process(clk, rst_n)
                 elsif decoded_instruction = I_AND then
                     state <= ADD1;
                 elsif decoded_instruction = I_OR then
-                    state <= SUB1;
+                    state <= OR1;
                 elsif decoded_instruction = I_BRANCH then
                     state <= BRANCH1;
                 elsif decoded_instruction = I_BZERO then
@@ -113,10 +113,8 @@ process(clk, rst_n)
                 write_reg_enable <= '1';
                 state <= NEXT1;
             when STORE1=>
-                addr_sel <= '0';
-                state <= STORE2;
-            when STORE2=>
-                write_reg_enable <= '1';
+                addr_sel <= '1';
+                ram_write_enable <= '1';
                 state <= NEXT1;
             when MOVE1=>
                 operation <= "00";
