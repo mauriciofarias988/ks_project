@@ -164,7 +164,7 @@ begin
                unsigned_overflow_flag <= '1'; 
             end if;
         elsif(operation = "01") then -- SUB
-            ula_out <= bus_b - bus_a;
+            ula_out <= bus_a - bus_b;
             if(bus_a(15) = '0' AND bus_b(15) = '1') AND ula_out(15) = '1' then 
             signed_overflow_flag <= '1';     
             elsif (bus_a(15) = '1' AND bus_b(15) = '0') AND ula_out(15) = '0' then
