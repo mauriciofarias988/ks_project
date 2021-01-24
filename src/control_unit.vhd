@@ -136,15 +136,11 @@ process(clk, rst_n)
              when AND1=>
                 operation <= "10";
                 c_sel <= '0';
-                state <= AND2;
-            when AND2=>
                 write_reg_enable <= '1';
                 state <= NEXT1;
             when OR1=>
                 operation <= "11";
                 c_sel <= '0';
-                state <= OR2;
-            when OR2=>
                 write_reg_enable <= '1';
                 state <= NEXT1;
                 
