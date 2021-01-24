@@ -177,9 +177,6 @@ process(clk, rst_n)
                     addr_sel <= '1';
                     pc_enable <= '1';
                     state <= NEXT2;  
-
-                else
-                    state <= NEXT2;
                 end if;
               when others=>
                                      
