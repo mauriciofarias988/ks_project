@@ -11,15 +11,15 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="327635000fs"></ZoomStartTime>
-      <ZoomEndTime time="550435001fs"></ZoomEndTime>
-      <Cursor1Time time="405000000fs"></Cursor1Time>
+      <ZoomStartTime time="360633334fs"></ZoomStartTime>
+      <ZoomEndTime time="626833335fs"></ZoomEndTime>
+      <Cursor1Time time="415000000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="175"></NameColumnWidth>
-      <ValueColumnWidth column_width="98"></ValueColumnWidth>
+      <ValueColumnWidth column_width="90"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="27" />
+   <WVObjectSize size="29" />
    <wvobject fp_name="/tb_k_and_s/rst_n" type="logic">
       <obj_property name="ElementShortName">rst_n</obj_property>
       <obj_property name="ObjectShortName">rst_n</obj_property>
@@ -56,14 +56,6 @@
       <obj_property name="ElementShortName">c_sel</obj_property>
       <obj_property name="ObjectShortName">c_sel</obj_property>
    </wvobject>
-   <wvobject fp_name="/tb_k_and_s/uut/control_unit_i/operation" type="array">
-      <obj_property name="ElementShortName">operation[1:0]</obj_property>
-      <obj_property name="ObjectShortName">operation[1:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/tb_k_and_s/uut/control_unit_i/decoded_instruction" type="other">
-      <obj_property name="ElementShortName">decoded_instruction</obj_property>
-      <obj_property name="ObjectShortName">decoded_instruction</obj_property>
-   </wvobject>
    <wvobject fp_name="/tb_k_and_s/uut/control_unit_i/ram_write_enable" type="logic">
       <obj_property name="ElementShortName">ram_write_enable</obj_property>
       <obj_property name="ObjectShortName">ram_write_enable</obj_property>
@@ -72,6 +64,14 @@
       <obj_property name="ElementShortName">state</obj_property>
       <obj_property name="ObjectShortName">state</obj_property>
    </wvobject>
+   <wvobject fp_name="/tb_k_and_s/uut/control_unit_i/decoded_instruction" type="other">
+      <obj_property name="ElementShortName">decoded_instruction</obj_property>
+      <obj_property name="ObjectShortName">decoded_instruction</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_k_and_s/data_from_ram" type="array">
+      <obj_property name="ElementShortName">data_from_ram[15:0]</obj_property>
+      <obj_property name="ObjectShortName">data_from_ram[15:0]</obj_property>
+   </wvobject>
    <wvobject fp_name="/tb_k_and_s/uut/datapath_i/program_counter" type="array">
       <obj_property name="ElementShortName">program_counter[4:0]</obj_property>
       <obj_property name="ObjectShortName">program_counter[4:0]</obj_property>
@@ -79,10 +79,6 @@
    <wvobject fp_name="/tb_k_and_s/uut/datapath_i/c_addr" type="array">
       <obj_property name="ElementShortName">c_addr[1:0]</obj_property>
       <obj_property name="ObjectShortName">c_addr[1:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/tb_k_and_s/data_from_ram" type="array">
-      <obj_property name="ElementShortName">data_from_ram[15:0]</obj_property>
-      <obj_property name="ObjectShortName">data_from_ram[15:0]</obj_property>
    </wvobject>
    <wvobject fp_name="/tb_k_and_s/uut/datapath_i/b_addr" type="array">
       <obj_property name="ElementShortName">b_addr[1:0]</obj_property>
@@ -120,12 +116,24 @@
       <obj_property name="ElementShortName">bus_c[15:0]</obj_property>
       <obj_property name="ObjectShortName">bus_c[15:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/tb_k_and_s/uut/datapath_i/data_in" type="array">
-      <obj_property name="ElementShortName">data_in[15:0]</obj_property>
-      <obj_property name="ObjectShortName">data_in[15:0]</obj_property>
+   <wvobject fp_name="/tb_k_and_s/uut/datapath_i/data_out" type="array">
+      <obj_property name="ElementShortName">data_out[15:0]</obj_property>
+      <obj_property name="ObjectShortName">data_out[15:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/tb_k_and_s/uut/datapath_i/program_counter" type="array">
-      <obj_property name="ElementShortName">program_counter[4:0]</obj_property>
-      <obj_property name="ObjectShortName">program_counter[4:0]</obj_property>
+   <wvobject fp_name="/tb_k_and_s/uut/datapath_i/a_addr" type="array">
+      <obj_property name="ElementShortName">a_addr[1:0]</obj_property>
+      <obj_property name="ObjectShortName">a_addr[1:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_k_and_s/uut/datapath_i/b_addr" type="array">
+      <obj_property name="ElementShortName">b_addr[1:0]</obj_property>
+      <obj_property name="ObjectShortName">b_addr[1:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_k_and_s/uut/datapath_i/c_addr" type="array">
+      <obj_property name="ElementShortName">c_addr[1:0]</obj_property>
+      <obj_property name="ObjectShortName">c_addr[1:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_k_and_s/uut/control_unit_i/operation" type="array">
+      <obj_property name="ElementShortName">operation[1:0]</obj_property>
+      <obj_property name="ObjectShortName">operation[1:0]</obj_property>
    </wvobject>
 </wave_config>
