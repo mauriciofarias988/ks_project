@@ -136,10 +136,6 @@ begin
     
     flags :    process (clk)
     begin
-        zero_op <= '0';
-        neg_op <= '0';
-        signed_overflow <= '0';
-        unsigned_overflow <= '0';
         if (flags_reg_enable = '1' AND rising_edge(clk)) then
             zero_op <= zero_op_flag; 
             neg_op <= neg_op_flag;

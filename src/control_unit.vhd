@@ -46,7 +46,7 @@ end control_unit;
 
 architecture rtl of control_unit is
 
-    type state_type is (START1, FETCH, DECODE, NEXT1, NEXT2, ADD1, ADD2, SUB1, SUB2, AND1, AND2, OR1, OR2, LOAD1, LOAD2, STORE1, STORE2, MOVE1, MOVE2, BRANCH1, BZERO, BNEG, NOP);
+    type state_type is (START1, FETCH, DECODE, NEXT1, NEXT2, ADD1, ADD2, SUB1, SUB2, AND1, AND2, OR1, OR2, LOAD1, LOAD2, STORE1, STORE2, MOVE1, MOVE2, BRANCH1, BZERO, BNEG, NOP, HALT1);
     signal state : state_type;
     
 begin
@@ -91,7 +91,7 @@ process(clk, rst_n)
                 elsif decoded_instruction = I_SUB then
                     state <= SUB1;
                 elsif decoded_instruction = I_AND then
-                    state <= ADD1;
+                    state <= AND1;
                 elsif decoded_instruction = I_OR then
                     state <= OR1;
                 elsif decoded_instruction = I_BRANCH then
@@ -102,6 +102,8 @@ process(clk, rst_n)
                     state <= BNEG;    
                 elsif decoded_instruction = I_NOP then
                     state <= NEXT1;
+                else -- HALT
+                    state <= HALT1;
                 end if;
                 
             --OPERAÇÕES DE MOVIMENTAÇÃO
@@ -146,28 +148,30 @@ process(clk, rst_n)
                 
             --OPERAÇÕES BRANCH
             when BRANCH1=>
-                branch <= '1';
+                branch <= '0';
                 addr_sel <= '1';
                 pc_enable <= '1';
                 state <= NEXT2;
             when BZERO=>
-                if zero_op<='1' then
-                    branch <= '1';
+                if zero_op <= '0' then
+                    branch <= '0';
                     addr_sel <= '1';
                     pc_enable <= '1';
                     state <= NEXT2;  
                 else
-                    state <= NEXT1; 
+                    state <= FETCH; 
                 end if;
              when BNEG=>
-                if neg_op<='1' then
-                    branch <= '1';
+                if neg_op <= '0' then
+                    branch <= '0';
                     addr_sel <= '1';
                     pc_enable <= '1';
-                    state <= NEXT2;  
+                    state <= NEXT2;
+                 else
+                    state <= FETCH; 
                 end if;
               when others=>
-                                     
+                    halt <= '1';     
            end case;
      end if;
 
@@ -175,4 +179,5 @@ end process;
 
 
 end rtl;
+-- Corrigir problema nas flags e branchs
 

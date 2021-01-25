@@ -1,12 +1,18 @@
 ;  Programa de Teste 1
 ;  Autor Joao Leonardo Fragoso
 811F 
-813E18:24 24/01/2021
-A124
+813E
+0105
+FFFF
+0000 
+A221
+020A
+030C
 825D
-A224 
-825C
-910E
+FFFF
+823C
+FFFF
+825B
 FFFF
 0000
 0000
@@ -24,14 +30,8 @@ FFFF
 0000
 0000
 0000
-0000
-0000
-0000
-0000
-0000
-0000
 0007
-0005
+0008
 
 ;end of file
 ;end of file
