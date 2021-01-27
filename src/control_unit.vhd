@@ -46,7 +46,7 @@ end control_unit;
 
 architecture rtl of control_unit is
 
-    type state_type is (START1, FETCH, DECODE, NEXT1, NEXT2, ADD1, ADD2, SUB1, SUB2, AND1, AND2, OR1, OR2, LOAD1, LOAD2, STORE1, STORE2, MOVE1, MOVE2, BRANCH1, BZERO, BNEG, NOP, HALT1);
+    type state_type is (START1, FETCH, DECODE, NEXT1, NEXT2, ADD1, SUB1, AND1, OR1, FLAG, LOAD1, LOAD2, STORE1, STORE2, MOVE1, MOVE2, BRANCH1, BZERO, BNEG, NOP, HALT1);
     signal state : state_type;
     
 begin
@@ -72,10 +72,8 @@ process(clk, rst_n)
                 state <= FETCH;
             when FETCH=>
                 state <= DECODE;
-            when NEXT1=>      
-                    state <= NEXT2;
-            when NEXT2=>
-                    ir_enable <= '1';
+            when NEXT1=> 
+            ir_enable <= '1';     
                     state <= FETCH;
             when DECODE=>
                 branch <= '1';
@@ -129,32 +127,23 @@ process(clk, rst_n)
                 operation <= "00";
                 write_reg_enable <= '1';
                 c_sel <= '0';
-                state <= ADD2;
-            when ADD2=>
-                flags_reg_enable <= '1';
-                state <= NEXT1;
+                state <= FLAG;
              when SUB1=>
                 operation <= "01";
                 write_reg_enable <= '1';
                 c_sel <= '0';
-                state <= SUB2;
-             when SUB2=>
-                flags_reg_enable <= '1';
-                state <= NEXT1;
+                state <= FLAG;
              when AND1=>
                 operation <= "10";
                 c_sel <= '0';
                 write_reg_enable <= '1';
-                state <= AND2;
-             when AND2=>
-                flags_reg_enable <= '1';
-                state <= NEXT1;
+                state <= FLAG;
             when OR1=>
                 operation <= "11";
                 c_sel <= '0';
                 write_reg_enable <= '1';
-                state <= OR2;
-            when OR2=>
+                state <= FLAG;
+            when FLAG =>
                 flags_reg_enable <= '1';
                 state <= NEXT1;
                 
