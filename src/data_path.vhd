@@ -68,9 +68,6 @@ signal program_counter : std_logic_vector (4 downto 0);
 
 begin
 
-    zero_op_flag <= '1' when ula_out = "0000000000000000" else '0';
-    neg_op_flag <= '1' when ula_out(15) = '1';
-    
     IR : process (clk)
     begin
         if (ir_enable = '1' AND rising_edge(clk)) then
@@ -139,13 +136,25 @@ begin
         if (flags_reg_enable = '1' AND rising_edge(clk)) then
             zero_op <= zero_op_flag; 
             neg_op <= neg_op_flag;
-            signed_overflow <= signed_overflow_flag;
             unsigned_overflow <= unsigned_overflow_flag;
+            signed_overflow <= signed_overflow_flag;
     end if;
     end process flags;
     
     ula : process(bus_a, bus_b, operation) -- ULA 
         begin
+        unsigned_overflow_flag <= '0';
+        signed_overflow_flag <= '0';
+        if  (ula_out = "0000000000000000") then
+        zero_op_flag <= '1';
+        else
+        zero_op_flag <= '0';
+        end if;
+        if  (ula_out(15) = '1') then
+        neg_op_flag <= '1';
+        else
+        neg_op_flag <= '0';
+        end if;
         if(operation = "00") then --SOMA
             ula_out <= bus_a + bus_b;
             if (bus_a(15) = '0' AND bus_b(15) = '0') AND ula_out(15) = '1' then
@@ -165,8 +174,6 @@ begin
             signed_overflow_flag <= '1';     
             elsif (bus_a(15) = '1' AND bus_b(15) = '0') AND ula_out(15) = '0' then
             signed_overflow_flag <= '1';    
-            elsif (bus_a(15) = '0' and bus_b(15) = '0') and (bus_a >= bus_b) then
-            unsigned_overflow_flag <= '1';
             elsif (bus_a(15) = '1' and bus_b(15) = '1') and ((not bus_a) - "1" <= (not bus_b)-1) then
             unsigned_overflow_flag <= '1';
             elsif (bus_a(15)='1' and bus_b(15)='0') then

@@ -11,15 +11,15 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="571858762fs"></ZoomStartTime>
-      <ZoomEndTime time="717192193fs"></ZoomEndTime>
-      <Cursor1Time time="587289000fs"></Cursor1Time>
+      <ZoomStartTime time="506930000fs"></ZoomStartTime>
+      <ZoomEndTime time="1053945449fs"></ZoomEndTime>
+      <Cursor1Time time="845338000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
-      <NameColumnWidth column_width="107"></NameColumnWidth>
+      <NameColumnWidth column_width="91"></NameColumnWidth>
       <ValueColumnWidth column_width="58"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="51" />
+   <WVObjectSize size="52" />
    <wvobject fp_name="/tb_k_and_s/rst_n" type="logic">
       <obj_property name="ElementShortName">rst_n</obj_property>
       <obj_property name="ObjectShortName">rst_n</obj_property>
@@ -223,5 +223,9 @@
    <wvobject fp_name="/tb_k_and_s/uut/datapath_i/signed_overflow" type="logic">
       <obj_property name="ElementShortName">signed_overflow</obj_property>
       <obj_property name="ObjectShortName">signed_overflow</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_k_and_s/uut/control_unit_i/flags_reg_enable" type="logic">
+      <obj_property name="ElementShortName">flags_reg_enable</obj_property>
+      <obj_property name="ObjectShortName">flags_reg_enable</obj_property>
    </wvobject>
 </wave_config>

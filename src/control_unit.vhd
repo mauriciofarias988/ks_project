@@ -129,21 +129,33 @@ process(clk, rst_n)
                 operation <= "00";
                 write_reg_enable <= '1';
                 c_sel <= '0';
+                state <= ADD2;
+            when ADD2=>
+                flags_reg_enable <= '1';
                 state <= NEXT1;
              when SUB1=>
                 operation <= "01";
                 write_reg_enable <= '1';
                 c_sel <= '0';
+                state <= SUB2;
+             when SUB2=>
+                flags_reg_enable <= '1';
                 state <= NEXT1;
              when AND1=>
                 operation <= "10";
                 c_sel <= '0';
                 write_reg_enable <= '1';
+                state <= AND2;
+             when AND2=>
+                flags_reg_enable <= '1';
                 state <= NEXT1;
             when OR1=>
                 operation <= "11";
                 c_sel <= '0';
                 write_reg_enable <= '1';
+                state <= OR2;
+            when OR2=>
+                flags_reg_enable <= '1';
                 state <= NEXT1;
                 
             --OPERAÇÕES BRANCH
@@ -153,22 +165,22 @@ process(clk, rst_n)
                 pc_enable <= '1';
                 state <= NEXT2;
             when BZERO=>
-                if zero_op <= '0' then
+                if zero_op = '1' then
                     branch <= '0';
                     addr_sel <= '1';
                     pc_enable <= '1';
-                    state <= NEXT2;  
+                    state <= NEXT1;  
                 else
-                    state <= FETCH; 
+                    state <= NEXT1;
                 end if;
              when BNEG=>
-                if neg_op <= '0' then
+                if neg_op = '1' then
                     branch <= '0';
                     addr_sel <= '1';
                     pc_enable <= '1';
-                    state <= NEXT2;
+                    state <= NEXT1;
                  else
-                    state <= FETCH; 
+                    state <= NEXT1; 
                 end if;
               when others=>
                     halt <= '1';     
