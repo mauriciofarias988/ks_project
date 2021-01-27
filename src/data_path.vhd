@@ -217,7 +217,7 @@ begin
     end if;
     end process Register_Bank;
     
-       bus_awire : bus_a <= register_3 when a_addr = "11" else
+    bus_awire : bus_a <= register_3 when a_addr = "11" else
     register_2 when a_addr = "10" else
     register_1 when a_addr = "01" else
     register_0;
